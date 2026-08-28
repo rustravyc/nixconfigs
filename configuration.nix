@@ -82,14 +82,11 @@ in
       Option "TearFree" "true"
     '';
 
-    displayManager = {
-      lightdm.enable = true;
-      sessionCommands = ''
-        if [ -f "$HOME/.xinitrc" ]; then
-          . "$HOME/.xinitrc"
-        fi
-      '';
-    };
+    displayManager.sessionCommands = ''
+      if [ -f "$HOME/.xinitrc" ]; then
+        . "$HOME/.xinitrc"
+      fi
+    '';
 
     windowManager.dwm = {
       enable = true;
@@ -97,6 +94,7 @@ in
     };
   };
 
+  services.displayManager.ly.enable = true;
   services.displayManager.defaultSession = "none+dwm";
 
   services.flatpak.enable = true;
@@ -145,7 +143,6 @@ in
     }];
   };
 
-
   nixpkgs.config.allowUnfree = true;
   
   programs.i3lock.enable = true;	
@@ -168,7 +165,7 @@ in
     adwaita-icon-theme
 
     fastfetch
-    vim
+    vim-full
     git
     wget
     gnumake
@@ -181,7 +178,9 @@ in
 
     discord
     ppsspp
+    pcsx2
     steam
+    lutris
     protonplus
     protonup-qt
     protontricks
@@ -201,13 +200,13 @@ in
     appimage-run
   ];
 
-nix.gc = {
+  nix.gc = {
     automatic = true;
     dates = "weekly";
     options = "--delete-older-than 5d";
   };
 
-programs.nix-ld = {
+  programs.nix-ld = {
     enable = true;
     libraries = with pkgs; [
       alsa-lib
@@ -239,7 +238,6 @@ programs.nix-ld = {
       libXcursor
       libXdamage
       libXext
-      libXfixes
       libXi
       libXrandr
       libXrender
@@ -249,7 +247,8 @@ programs.nix-ld = {
       pipewire
     ];
   };
- 
+  
+  home-manager.backupFileExtension = "backup"; 
   services.gvfs.enable = true;
   services.tumbler.enable = true;
 

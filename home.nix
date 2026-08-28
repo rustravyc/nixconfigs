@@ -55,6 +55,268 @@
     x11.enable = true;
   };
 
+  home.file.".config/picom/picom.conf".text = ''
+    shadow = true;
+    shadow-radius = 0;
+    shadow-offset-x = 6;
+    shadow-offset-y = 6;
+    shadow-color = "#1e1e2e";
+
+    fading = true;
+    fade-in-step = 0.03;
+    fade-out-step = 0.03;
+
+    frame-opacity = 0.7;
+
+    corner-radius = 0;
+
+    backend = "glx";
+    dithered-present = false;
+    vsync = true;
+
+    detect-rounded-corners = true;
+    detect-client-opacity = true;
+    detect-transient = true;
+    use-damage = true;
+
+    rules: ({
+      match = "window_type = 'tooltip'";
+      fade = false;
+      shadow = true;
+      opacity = 0.55;
+      full-shadow = false;
+    }, {
+      match = "window_type = 'dock'    || "
+              "window_type = 'desktop' || "
+              "_GTK_FRAME_EXTENTS@";
+    }, {
+      match = "window_type != 'dock'";
+    }, {
+      match = "window_type = 'dock' || "
+              "window_type = 'desktop'";
+      corner-radius = 0;
+    }, {
+      match = "name = 'Notification'   || "
+              "class_g = 'Conky'        || "
+              "class_g ?= 'Notify-osd' || "
+              "class_g = 'Cairo-clock' || "
+              "_GTK_FRAME_EXTENTS@";
+      shadow = false;
+    })
+  ''; 
+
+home.file.".config/betterlockscreen/betterlockscreenrc".text = ''
+
+fx_list=(dim blur dimblur pixel dimpixel)
+dim_level="40"
+blur_level="1"
+
+font="TerminessNerdFont"
+insidecolor="11111b00"
+ringcolor="89b4faff"
+keyhlcolor="89b4faff"
+bshlcolor="f38ba8ff"
+
+veriftext="[checking]"
+verifcolor="89b4faff"
+timecolor="89b4faff"
+datecolor="cdd6f4ff"
+wrongtext="[incorrect]"
+wrongcolor="f38ba8ff"
+'';
+
+  home.file.".config/rofi/config.rasi".text = ''
+    configuration {
+        modi: "drun,run,window";
+        show-icons: true;
+        icon-theme: "Papirus";
+        terminal: "st";
+        drun-display-format: "{icon} {name}";
+        location: 0;
+        disable-history: false;
+        hide-scrollbar: true;
+        display-drun: " [apps] ";
+        display-run: " [run] ";
+        display-window: " [window] ";
+    }
+
+    * {
+        font: "TerminessNerdFont 12";
+        bg: #11111b;
+        accent: #89b4fa;
+
+        background-color: transparent;
+        text-color: #cdd6f4;
+
+        margin: 0;
+        padding: 0;
+        spacing: 0;
+    }
+
+    window {
+        width: 30%;
+        background-color: @bg;
+        border: 1px;
+        border-color: @accent;
+        border-radius: 0px;
+        padding: 12px;
+    }
+
+    mainbox {
+        background-color: @bg;
+    }
+
+    inputbar {
+        spacing: 8px; 
+        padding: 8px;
+        background-color: @bg;
+        text-color: @accent;
+        children: [ prompt, entry ];
+    }
+
+    prompt {
+        background-color: @accent;
+        text-color: @bg;
+        padding: 6px;
+        border-radius: 0px;
+    }
+
+    entry {
+        background-color: @bg;
+        text-color: #cdd6f4;
+        padding: 6px;
+    }
+
+    listview {
+        lines: 8;
+        columns: 1;
+        fixed-height: false;
+        border: 0px;
+        spacing: 4px;
+        margin: 8px 0px 0px 0px;
+        background-color: @bg;
+    }
+
+    element,
+    element normal.normal,
+    element normal.urgent,
+    element normal.active,
+    element alternate.normal,
+    element alternate.urgent,
+    element alternate.active {
+        background-color: @bg;
+        text-color: #cdd6f4;
+        padding: 8px;
+        border-radius: 0px;
+    }
+
+    element selected.normal,
+    element selected.urgent,
+    element selected.active {
+        background-color: @accent;
+        text-color: @bg;
+    }
+
+    element-text, element-icon {
+        background-color: inherit;
+        text-color: inherit;
+        vertical-align: 0.5;
+    }
+
+    element-icon {
+        size: 24px;
+        margin: 0px 8px 0px 0px;
+    }
+  '';
+
+  home.file.".config/fastfetch/config.jsonc".text = ''
+    {
+      "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+      "logo": {
+        "type": "file",
+        "source": "/home/ravyc/.config/fastfetch/halflife.txt",
+        "color": {
+          "1": "yellow"
+        },
+        "padding": {
+          "top": 1,
+          "right": 3
+        }
+      },
+      "display": {
+        "separator": " ",
+        "color": {
+          "keys": "yellow"
+        }
+      },
+      "modules": [
+        "title",
+        {
+          "type": "custom",
+          "format": "──────────────────────────────────────────────"
+        },
+        {
+          "type": "os",
+          "key": "[os]",
+          "keyColor": "yellow"
+        },
+        {
+          "type": "kernel",
+          "key": "[kernel]",
+          "keyColor": "yellow"
+        },
+        {
+          "type": "uptime",
+          "key": "[uptime]",
+          "keyColor": "yellow"
+        },
+        {
+          "type": "packages",
+          "key": "[packages]",
+          "keyColor": "yellow"
+        },
+        {
+          "type": "wm",
+          "key": "[wm]",
+          "keyColor": "yellow"
+        },
+        {
+          "type": "terminal",
+          "key": "[terminal]",
+          "keyColor": "yellow"
+        },
+        {
+          "type": "cpu",
+          "key": "[cpu]",
+          "keyColor": "yellow"
+        },
+        {
+          "type": "gpu",
+          "key": "[gpu]",
+          "keyColor": "yellow"
+        },
+        {
+          "type": "memory",
+          "key": "[memory]",
+          "keyColor": "yellow"
+        },
+        {
+          "type": "disk",
+          "key": "[disk]",
+          "keyColor": "yellow"
+        },
+        {
+          "type": "custom",
+          "format": "──────────────────────────────────────────────"
+        },
+        {
+          "type": "colors",
+          "symbol": "circle"
+        }
+      ]
+    }
+  '';
+
   programs.bash = {
     enable = true;
     initExtra = ''
@@ -107,6 +369,7 @@ call plug#end()
 let g:airline_theme='catppuccin_macchiato'
 
 syntax on
+set clipboard=unnamedplus
 set number relativenumber
 set mouse=a
 set encoding=utf-8
@@ -177,7 +440,10 @@ nnoremap <C-l> <C-w>l
     dunst
     papirus-icon-theme
     adw-gtk3
+    picom
+    rofi
+    fastfetch
   ];
 
   programs.home-manager.enable = true;
-}  
+}
