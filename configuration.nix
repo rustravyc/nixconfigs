@@ -73,7 +73,7 @@ in
     enable = true;
     xkb = {
       layout = "br";
-      variant = "";
+      variant = "abnt2";
     };
 
     videoDrivers = [ "modesetting" ];
@@ -162,7 +162,6 @@ in
     xidlehook
     betterlockscreen
     libnotify
-    adwaita-icon-theme
 
     fastfetch
     vim-full
@@ -176,13 +175,14 @@ in
     lxappearance
     arandr
 
+    catppuccin-gtk
+
     discord
     ppsspp
     pcsx2
     steam
     lutris
     protonplus
-    protonup-qt
     protontricks
     
     vlc
@@ -208,45 +208,7 @@ in
 
   programs.nix-ld = {
     enable = true;
-    libraries = with pkgs; [
-      alsa-lib
-      at-spi2-atk
-      at-spi2-core
-      atk
-      cairo
-      cups
-      dbus
-      expat
-      fontconfig
-      freetype
-      gdk-pixbuf
-      glib
-      gtk3
-      libdrm
-      libgbm
-      libGL
-      libpulseaudio
-      libxkbcommon
-      mesa
-      wayland
-      nspr
-      nss
-      pango
-      systemd
-      libX11
-      libXcomposite
-      libXcursor
-      libXdamage
-      libXext
-      libXi
-      libXrandr
-      libXrender
-      libXtst
-      libxcb
-      libxshmfence
-      pipewire
-    ];
-  };
+      };
   
   home-manager.backupFileExtension = "backup"; 
   services.gvfs.enable = true;

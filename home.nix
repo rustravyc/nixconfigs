@@ -5,56 +5,6 @@
   home.homeDirectory = "/home/ravyc";
   home.stateVersion = "26.05";
 
-  gtk = {
-    enable = true;
-    theme = {
-      name = "adw-gtk3-dark";
-      package = pkgs.adw-gtk3;
-    };
-    iconTheme = {
-      name = "Papirus-Dark";
-      package = pkgs.papirus-icon-theme;
-    };
-    gtk3.extraConfig.gtk-application-prefer-dark-theme = 1;
-    gtk4.extraConfig.gtk-application-prefer-dark-theme = 1;
-  };
-
-  home.file.".config/gtk-4.0/gtk.css".text = ''
-    @define-color accent_color #89b4fa;
-    @define-color accent_bg_color #89b4fa;
-    @define-color window_bg_color #1e1e2e;
-    @define-color window_fg_color #cdd6f4;
-    @define-color view_bg_color #181825;
-    @define-color view_fg_color #cdd6f4;
-    @define-color headerbar_bg_color #11111b;
-    @define-color headerbar_fg_color #cdd6f4;
-    @define-color card_bg_color #1e1e2e;
-    @define-color card_fg_color #cdd6f4;
-    @define-color dialog_bg_color #1e1e2e;
-    @define-color dialog_fg_color #cdd6f4;
-    @define-color popover_bg_color #1e1e2e;
-    @define-color popover_fg_color #cdd6f4;
-  '';
-
-  home.file.".config/gtk-3.0/gtk.css".text = ''
-    @define-color accent_color #89b4fa;
-    @define-color accent_bg_color #89b4fa;
-    @define-color window_bg_color #1e1e2e;
-    @define-color window_fg_color #cdd6f4;
-    @define-color view_bg_color #181825;
-    @define-color view_fg_color #cdd6f4;
-    @define-color headerbar_bg_color #11111b;
-    @define-color headerbar_fg_color #cdd6f4;
-  '';
-
-  home.pointerCursor = {
-    name = "Catppuccin-Mocha-Dark-Cursors";
-    package = pkgs.catppuccin-cursors.mochaBlue;
-    size = 16;
-    gtk.enable = true;
-    x11.enable = true;
-  };
-
   home.file.".config/picom/picom.conf".text = ''
     shadow = true;
     shadow-radius = 0;
@@ -334,9 +284,7 @@ wrongcolor="f38ba8ff"
   };
 
   home.file.".xinitrc".text = ''
-    export GTK_THEME="adw-gtk3-dark"
     export ADW_DISABLE_PORTAL=1
-    export XCURSOR_THEME="Catppuccin-Mocha-Dark-Cursors"
     export XCURSOR_SIZE=16
 
     xidlehook \
