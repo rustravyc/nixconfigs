@@ -1,52 +1,20 @@
 { config, pkgs, ... }:
 
-let
-  myDwm = pkgs.dwm.overrideAttrs (oldAttrs: {
-    src = pkgs.fetchFromGitHub {
-      owner = "rustravyc";
-      repo = "dwm";
-      rev = "main";
-      hash = "sha256-sjiwiukygyrgnTDorpIf2+yJjhSJdWp71BYKeT/ZLQs=";
-    };
-    nativeBuildInputs = (oldAttrs.nativeBuildInputs or [ ]) ++ (with pkgs; [ pkg-config gnumake gcc ]);
-    buildInputs = (oldAttrs.buildInputs or [ ]) ++ (with pkgs; [ libx11 libxinerama libxft fontconfig ]);
-    preBuild = "make clean";
-    makeFlags = [ "PREFIX=$(out)" ];
-  });
-
-  mySt = pkgs.st.overrideAttrs (oldAttrs: {
-    src = pkgs.fetchFromGitHub {
-      owner = "rustravyc";
-      repo = "st";
-      rev = "main";
-      hash = "sha256-+qTOMIVkjoL05nzjxUFPocRkMknpr3BJ/PQuHwkmlpw=";
-    };
-    nativeBuildInputs = (oldAttrs.nativeBuildInputs or [ ]) ++ (with pkgs; [ pkg-config gnumake gcc ncurses ]);
-    buildInputs = (oldAttrs.buildInputs or [ ]) ++ (with pkgs; [ libx11 libxft fontconfig ]);
-    preBuild = "make clean";
-    makeFlags = [ "PREFIX=$(out)" ];
-  });
-
-  mySlstatus = pkgs.slstatus.overrideAttrs (oldAttrs: {
-    src = pkgs.fetchFromGitHub {
-      owner = "rustravyc";
-      repo = "slstatus";
-      rev = "main";
-      hash = "sha256-IMyqSABzo6AxWX1DQGx2QOEi78L0H8qV4E2ImDZ8PQ8=";
-    };
-    nativeBuildInputs = (oldAttrs.nativeBuildInputs or [ ]) ++ (with pkgs; [ pkg-config gnumake gcc ]);
-    buildInputs = (oldAttrs.buildInputs or [ ]) ++ (with pkgs; [ libx11 ]);
-    preBuild = "make clean";
-    makeFlags = [ "PREFIX=$(out)" ];
-  });
-in
 {
   imports = [
     ./hardware-configuration.nix
+    ../../pkgs/default.nix
   ];
+
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  home-manager.users.ravyc = import ./home.nix;
-  
+  nix.settings.auto-optimise-store = true;
+
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 5d";
+  };
+
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -75,22 +43,18 @@ in
       layout = "br";
       variant = "abnt2";
     };
-
     videoDrivers = [ "modesetting" ];
-
     deviceSection = ''
       Option "TearFree" "true"
     '';
-
     displayManager.sessionCommands = ''
       if [ -f "$HOME/.xinitrc" ]; then
         . "$HOME/.xinitrc"
       fi
     '';
-
     windowManager.dwm = {
       enable = true;
-      package = myDwm;
+      package = pkgs.myDwm;
     };
   };
 
@@ -122,6 +86,9 @@ in
       intel-media-driver
       intel-vaapi-driver
       libvdpau-va-gl
+      xf86-video-intel
+      vulkan-loader
+      inteltool
     ];
   };
 
@@ -151,27 +118,34 @@ in
 
   nixpkgs.config.allowUnfree = true;
   
-  programs.i3lock.enable = true;	
+  programs.i3lock.enable = true;    
   security.pam.services.i3lock = {};
   security.pam.services.betterlockscreen = {};
   programs.dconf.enable = true;
+  programs.nix-ld.enable = true;
+
+  home-manager.backupFileExtension = "backup"; 
+  services.gvfs.enable = true;
+  services.tumbler.enable = true;
 
   environment.systemPackages = with pkgs; [
     myDwm
     mySt
     mySlstatus
-
     python3
     uv
     sqlite
     nodejs
-
     picom
     xwallpaper
     xidlehook
     betterlockscreen
     libnotify
-
+    usbutils
+    appimage-run
+    steam-run
+    ppsspp
+    pcsx2
     fastfetch
     vim-full
     git
@@ -183,36 +157,19 @@ in
     glib
     mpv
     lxappearance
-
     catppuccin-gtk
-
     firefox
     pavucontrol
     thunar
+    obs-studio
     rofi
     maim
     slop
-    xclip	
+    xclip    
     xinit
     xrandr
     dunst
   ];
-
-  nix.settings.auto-optimise-store = true;
-
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 5d";
-  };
-
-  programs.nix-ld = {
-    enable = true;
-      };
-  
-  home-manager.backupFileExtension = "backup"; 
-  services.gvfs.enable = true;
-  services.tumbler.enable = true;
 
   system.stateVersion = "26.05";
 }
