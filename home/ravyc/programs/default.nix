@@ -12,6 +12,7 @@
       larp = "fastfetch";
       conf = "doas vim /etc/nixos/hosts/morphine/configuration.nix";
       home = "doas vim /etc/nixos/home/ravyc/home.nix";
+      shell = "doas vim /etc/nixos/home/ravyc/programs/default.nix";
       flake = "doas vim /etc/nixos/flake.nix";
       snake = "python3 ";
       revive = "doas nix-channel --update";
@@ -208,6 +209,9 @@
 
     xset led named "Scroll Lock" &
     xset r rate 200 65 &
+    xset s off
+    xset s noblank
+    xset -dpms
 
     xrandr --output HDMI-2 --mode 1600x900 --rate 75.00 &
     xwallpaper --zoom ~/wallpaper/wallpaper.png &
