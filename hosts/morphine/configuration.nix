@@ -6,8 +6,10 @@
     ../../pkgs/default.nix
   ];
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  nix.settings.auto-optimise-store = true;
+  nix.settings = {
+    experimental-features = [ "nix-command" "flakes" ];
+    auto-optimise-store = true;
+  };
 
   nix.gc = {
     automatic = true;
@@ -15,7 +17,28 @@
     options = "--delete-older-than 5d";
   };
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_zen;
+  
+  boot.kernelParams = [
+    "intel_pstate=active"
+    "i915.enable_guc=3"
+    "i915.enable_fbc=1"
+    "i915.fastboot=1"
+    "mitigations=off"
+    "nowatchdog"
+  ];
+
+  boot.kernel.sysctl = {
+    "vm.swappiness" = 10;
+    "vm.vfs_cache_pressure" = 50;
+    "vm.dirty_ratio" = 10;
+    "vm.dirty_background_ratio" = 5;
+    "net.core.default_qdisc" = "fq";
+    "net.ipv4.tcp_congestion_control" = "bbr";
+    "kernel.nmi_watchdog" = 0;
+    "kernel.unprivileged_userns_clone" = 1;
+  };
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
@@ -36,6 +59,11 @@
       nerd-fonts.terminess-ttf
     ];
   };
+
+  powerManagement.cpuFreqGovernor = "performance";
+  hardware.cpu.intel.updateMicrocode = true;
+  services.irqbalance.enable = true;
+  services.fstrim.enable = true;
 
   services.xserver = {
     enable = true;
@@ -84,9 +112,7 @@
     enable = true;
     extraPackages = with pkgs; [
       intel-media-driver
-      intel-vaapi-driver
       libvdpau-va-gl
-      xf86-video-intel
       vulkan-loader
       inteltool
     ];
@@ -104,7 +130,6 @@
     isNormalUser = true;
     description = "ravyc";
     extraGroups = [ "networkmanager" "wheel" "audio" "video" "input" ];
-    packages = with pkgs; [ ];
   };
 
   security.doas = {
@@ -129,7 +154,6 @@
   services.tumbler.enable = true;
 
   environment.systemPackages = with pkgs; [
-    myDwm
     mySt
     mySlstatus
     python3
