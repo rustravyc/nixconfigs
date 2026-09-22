@@ -1,10 +1,14 @@
 { config, pkgs, ... }:
 
+# [here my configuration, you really will need delete the hardware-configuration or this can cause some issues.]
+
 {
   imports = [
     ./hardware-configuration.nix
     ../../pkgs/default.nix
   ];
+
+# [some flake and kernel configuration, this is specific for intel GPU/CPU]
 
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
@@ -42,6 +46,8 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # [you can change the hostname and the timezone, but you need change in another places too.]
+
   networking.hostName = "morphine";
   networking.networkmanager.enable = true;
 
@@ -53,6 +59,8 @@
     keyMap = "br-abnt2";
   };
 
+# [terminess font as default, change to some font you like it or just add another one]
+
   fonts = {
     fontconfig.enable = true;
     packages = with pkgs; [
@@ -60,10 +68,14 @@
     ];
   };
 
+# [kernel tweaks for intel]
+
   powerManagement.cpuFreqGovernor = "performance";
   hardware.cpu.intel.updateMicrocode = true;
   services.irqbalance.enable = true;
   services.fstrim.enable = true;
+
+# [xserver configs, change to your language and keyboard]
 
   services.xserver = {
     enable = true;
@@ -85,6 +97,8 @@
       package = pkgs.myDwm;
     };
   };
+
+# [ly as default display manager]
 
   services.displayManager.ly = {
     enable = true;
@@ -114,7 +128,6 @@
       intel-media-driver
       libvdpau-va-gl
       vulkan-loader
-      inteltool
     ];
   };
 
@@ -126,11 +139,15 @@
     pulse.enable = true;
   };
 
+# [change to your username]
+
   users.users.ravyc = {
     isNormalUser = true;
     description = "ravyc";
     extraGroups = [ "networkmanager" "wheel" "audio" "video" "input" ];
   };
+
+# [yes, fucking doas as default...i just like it, but you can remove to set sudo to default. both works]
 
   security.doas = {
     enable = true;
@@ -142,7 +159,9 @@
   };
 
   nixpkgs.config.allowUnfree = true;
-  
+
+# [i really recommend you dont change any line here]
+
   programs.i3lock.enable = true;    
   security.pam.services.i3lock = {};
   security.pam.services.betterlockscreen = {};
@@ -154,45 +173,66 @@
   services.tumbler.enable = true;
 
   environment.systemPackages = with pkgs; [
+
+# [here my suckless stuff]
+
     mySt
     mySlstatus
+
+# [programming stuff, you can delete it if you dont need it]
+
     python3
     uv
     sqlite
     nodejs
+    vim
+
+# [some Xorg apps, essential to make dwm works so i dont recommend remove it]
+
     picom
     xwallpaper
     xidlehook
     betterlockscreen
     libnotify
-    usbutils
-    appimage-run
-    steam-run
-    ppsspp
-    pcsx2
-    fastfetch
-    vim-full
+    pavucontrol
+    rofi
+    lxappearance
+    thunar
+    mpv
+    maim
+    slop
+    xclip
+    xinit
+    xrandr
+    dunst
+
+# [some dev pkgs, you can remove it too]
+
     git
-    wget
+    curl
     gnumake
     gcc
     pkg-config
     unzip
+    unrar
     glib
-    mpv
-    lxappearance
+
+# [i use gtk catppuccin to set the gtk themes in general on dwm, but you can change it for some theme you like it]
+
     catppuccin-gtk
+    catppuccin
     firefox
-    pavucontrol
-    thunar
-    obs-studio
-    rofi
-    maim
-    slop
-    xclip    
-    xinit
-    xrandr
-    dunst
+
+# [here are all my gaming stuff, if you just do programming, you can remove it]
+
+  heroic
+  hydralauncher
+  steam
+  protontricks
+  protonplus
+  protonup-qt
+  appimage-run
+
   ];
 
   system.stateVersion = "26.05";
