@@ -1,5 +1,7 @@
 { pkgs, ... }:
 
+# [here some aliases, you can change it if you dont like it, but everything works]
+
 {
   programs.bash = {
     enable = true;
@@ -20,6 +22,8 @@
       boot = "doas /nix/var/nix/profiles/system/bin/switch-to-configuration boot";
     };
   };
+
+# [other configs that i really recommend you dont change it, you can break some things]
 
   services.dunst = {
     enable = true;
